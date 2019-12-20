@@ -154,5 +154,20 @@ namespace VSIXProject1
             return "test1.shfbproj";
         }
 
+        private static void CompileDocumentation()
+        {
+            Process process = new Process();
+            ProcessStartInfo info = new ProcessStartInfo()
+            {
+                FileName = "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
+                Arguments = "test1.shfbproj",
+                CreateNoWindow = false
+            };
+            process.StartInfo = info;
+            process.Start();
+            process.WaitForExit();
+
+            Process.Start(".\\Help\\Documentation.chm");
+        }
     }
 }
