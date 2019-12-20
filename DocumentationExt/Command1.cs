@@ -91,6 +91,68 @@ namespace VSIXProject1
         private void Execute(object sender, EventArgs e)
         {
         }
+        private static string GenerateProject(string xmlSource, string binSource)
+        {
+            XNamespace xmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
+            XDocument doc = new XDocument(
+                new XDeclaration("1.0", "utf-16", ""),
+                new XElement(
+                    xmlns + "Project",
+                    new XAttribute("ToolsVersion", "14.0"),
+                    new XAttribute("DefaultTargets", "Build"),
+                    new XElement(
+                        xmlns + "Import",
+                        new XAttribute("Project", "$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props"),
+                        new XAttribute("Condition", "Exists('$(MSBuildExtensionsPath)\\$(MSBuildToolsVersion)\\Microsoft.Common.props')")
+                    ),
+                    new XElement(
+                        xmlns + "PropertyGroup",
+                        new XElement(xmlns + "SchemaVersion", "2.0"),
+                        new XElement(xmlns + "ProjectGuid", Guid.NewGuid()),
+                        new XElement(xmlns + "SHFBSchemaVersion", "2017.9.26.0"),
+                        new XElement(xmlns + "Name", "Documentation"),
+                        new XElement(xmlns + "FrameworkVersion", ".NET Framework 4.5"),
+                        new XElement(xmlns + "OutputPath", ".\\Help\\"),
+                        new XElement(xmlns + "HtmlHelpName", "Documentation"),
+                        new XElement(xmlns + "Language", "ru-RU"),
+                        new XElement(
+                            xmlns + "DocumentationSources",
+                            new XElement(
+                                xmlns + "DocumentationSource",
+                                new XAttribute("sourceFile", xmlSource)
+                            ),
+                            new XElement(
+                                xmlns + "DocumentationSource",
+                                new XAttribute("sourceFile", binSource)
+                            )
+                        ),
+                        new XElement(xmlns + "HelpFileFormat", "HtmlHelp1"),
+                        new XElement(xmlns + "SyntaxFilters", "Standard"),
+                        new XElement(xmlns + "PresentationStyle", "VS2013"),
+                        new XElement(xmlns + "CleanIntermediates", true),
+                        new XElement(xmlns + "KeepLogFile", true),
+                        new XElement(xmlns + "DisableCodeBlockComponent", false),
+                        new XElement(xmlns + "IndentHtml", true),
+                        new XElement(xmlns + "BuildAssemblerVerbosity", "OnlyWarningsAndErrors"),
+                        new XElement(xmlns + "SaveComponentCacheCapacity", 100)
+                    ),
+                    new XElement(
+                        xmlns + "Import",
+                        new XAttribute("Project", "$(MSBuildToolsPath)\\Microsoft.Common.targets"),
+                        new XAttribute("Condition", "'$(MSBuildRestoreSessionId)' != ''")
+                    ),
+                    new XElement(
+                        xmlns + "Import",
+                        new XAttribute("Project", "$(SHFBROOT)\\SandcastleHelpFileBuilder.targets"),
+                        new XAttribute("Condition", "'$(MSBuildRestoreSessionId)' == ''")
+                    )
+
+                )
+            );
+            doc.Root.ReplaceAttributes(null);
+            doc.Save("test1.shfbproj");
+            return "test1.shfbproj";
+        }
 
     }
 }
