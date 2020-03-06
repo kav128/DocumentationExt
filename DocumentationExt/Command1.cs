@@ -92,9 +92,8 @@ namespace VSIXProject1
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            GenerateProject(
-                "C:\\Users\\kav128\\Documents\\Учеба\\5 семестр\\Инструментальные средства\\Lab1\\Lab\\bin\\Debug\\netcoreapp3.0\\InstrLab.xml",
-                "C:\\Users\\kav128\\Documents\\Учеба\\5 семестр\\Инструментальные средства\\Lab1\\Lab\\bin\\Debug\\netcoreapp3.0\\InstrLab.dll");
+            string home = "C:\\Users\\kav128\\Documents\\Учеба\\5 семестр\\Инструментальные средства\\Lab1\\Lab\\bin\\Debug\\netcoreapp3.0";
+            GenerateProject(home + "\\InstrLab.xml", home + "\\InstrLab.dll");
 
             Thread thread = new Thread(CompileDocumentation);
             thread.Start();
