@@ -93,10 +93,10 @@ namespace VSIXProject1
             ThreadHelper.ThrowIfNotOnUIThread();
 
             string home = "C:\\Users\\kav128\\Documents\\Учеба\\5 семестр\\Инструментальные средства\\Lab1\\Lab\\bin\\Debug\\netcoreapp3.0";
-            GenerateProject(home + "\\InstrLab.xml", home + "\\InstrLab.dll");
+            string filename = GenerateProject(home + "\\InstrLab.xml", home + "\\InstrLab.dll");
 
-            Thread thread = new Thread(CompileDocumentation);
-            thread.Start();
+            Thread thread = new Thread(new ParameterizedThreadStart(CompileDocumentation));
+            thread.Start(filename);
         }
 
         private static string GenerateProject(string xmlSource, string binSource)
@@ -158,17 +158,18 @@ namespace VSIXProject1
                 )
             );
             doc.Root.ReplaceAttributes(null);
-            doc.Save("test1.shfbproj");
-            return "test1.shfbproj";
+            string filename = "helpproj.shfbproj";
+            doc.Save(filename);
+            return filename;
         }
 
-        private static void CompileDocumentation()
+        private static void CompileDocumentation(string filename)
         {
             Process process = new Process();
             ProcessStartInfo info = new ProcessStartInfo()
             {
                 FileName = "C:\\Program Files (x86)\\MSBuild\\14.0\\Bin\\MSBuild.exe",
-                Arguments = "test1.shfbproj",
+                Arguments = filename,
                 CreateNoWindow = false
             };
             process.StartInfo = info;
